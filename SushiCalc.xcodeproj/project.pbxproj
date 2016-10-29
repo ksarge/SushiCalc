@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					9BB4D1511DC48C240080A2D1 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = ZX9UTWW422;
 						ProvisioningStyle = Automatic;
 					};
 					9BB4D1651DC48C250080A2D1 = {
@@ -410,9 +411,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ZX9UTWW422;
 				INFOPLIST_FILE = SushiCalc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = kamon.SushiCalc;
+				PRODUCT_BUNDLE_IDENTIFIER = ksarge.SushiCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -422,9 +424,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ZX9UTWW422;
 				INFOPLIST_FILE = SushiCalc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = kamon.SushiCalc;
+				PRODUCT_BUNDLE_IDENTIFIER = ksarge.SushiCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -503,6 +506,7 @@
 				9BB4D17C1DC48C250080A2D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9BB4D17D1DC48C250080A2D1 /* Build configuration list for PBXNativeTarget "SushiCalcTests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +515,7 @@
 				9BB4D17F1DC48C250080A2D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9BB4D1801DC48C250080A2D1 /* Build configuration list for PBXNativeTarget "SushiCalcUITests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +524,7 @@
 				9BB4D1821DC48C250080A2D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
