@@ -9,17 +9,55 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+//    @IBOutlet weak var plate0Count: UILabel!
+//    @IBOutlet weak var plate1Count: UILabel!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    @IBOutlet var plateCounters: [UILabel]!
+    
+    
+    @IBOutlet weak var plate0Price: UITextField!
+    @IBOutlet weak var plate1Price: UITextField!
+    
+
+    @IBOutlet weak var totalPrice: UILabel!
+    @IBOutlet weak var taxedTotalPrice: UILabel!
+    @IBOutlet weak var tippedTotalPrice: UILabel!
+    
+    
+    /* TODO: Find out a way to make different buttons utilize the same callbacks and then update the corresponding plateCount.
+     */
+    
+    @IBAction func addButtonPressed(_ sender: UIButton) {
+        
+        
+        let x = Int(plateCounters[0].text!)!
+        
+        plateCounters[0].text = String(x + 1)
+        
+        calc()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func subButtonPressed(_ sender: UIButton) {
+        
+        let x = Int(plateCounters[0].text!)!
+        
+        if x <= 0 {
+            plateCounters[0].text = String(0)
+        } else {
+            plateCounters[0].text = String(x - 1)
+        }
+        calc()
     }
-
+    
+    func calc() {
+        let x = Double(plateCounters[0].text!)!
+        let p: Double! = Double(plate0Price.text!)!
+        totalPrice.text = String(format: "$%.2f", x * p)
+        taxedTotalPrice.text = String(format: "$%.2f", x * p * 1.095)
+        tippedTotalPrice.text = String(format: "$%.2f", x * p * 1.095 * 1.18)
+    }
+    
 
 }
 
