@@ -8,7 +8,6 @@
 
 /*
  TODO: Create secondary page that allows the changing of plate colors
- TODO: Fix String formatting so it actually works on on text fields
  TODO: Fix keyboard
  http://stackoverflow.com/questions/31363216/set-the-maximum-character-length-of-a-uitextfield-in-swift
  */
@@ -27,7 +26,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     /* Formats text fields to be of format %_.__ */
     func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.text = String(format: "%.2f", Double(textField.text!)!)
+        let entry: Double? = Double(textField.text!)
+        if entry != nil {
+            textField.text = String(format: "%.2f", entry!)
+        } else {
+            textField.text = String(format: "%.2f", Double(textField.tag) + 1)
+        }
     }
     
     /* Touching the screen anywhere closes the keyboard */
