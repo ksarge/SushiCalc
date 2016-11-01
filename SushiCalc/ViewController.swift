@@ -8,40 +8,34 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        textField.text = String(format: "$%.2f", textField)
+    }
     
     /*
-     TODO: Put price fields in an array
-     TODO: Fix calc to run through each counter and price
-     TODO: Refactor variables to increase readibility
-     
      TODO: Create secondary page that allows the changing of plate colors
      */
     
     @IBOutlet var plateCounters: [UILabel]!
+    @IBOutlet var platePrices: [UITextField]!
     
-    @IBOutlet weak var plate0Price: UITextField!
-    @IBOutlet weak var plate1Price: UITextField!
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var taxedTotalPrice: UILabel!
     @IBOutlet weak var tippedTotalPrice: UILabel!
     
-
-    
     @IBAction func addButtonPressed(_ sender: UIButton) {
-        
         let tag   = sender.tag
         let count = Int(plateCounters[tag].text!)!
-        
         plateCounters[tag].text = String(count + 1)
-        
         calc()
     }
 
     @IBAction func subButtonPressed(_ sender: UIButton) {
-        
         let tag   = sender.tag
-        let count = Int(plateCounters[0].text!)!
+        let count = Int(plateCounters[tag].text!)!
         
         if count <= 0 {
             plateCounters[tag].text = String(0)
@@ -52,15 +46,18 @@ class ViewController: UIViewController {
     }
     
     func calc() {
-        let x = Double(plateCounters[0].text!)!
-
+        let len = plateCounters.count
         
-        let p: Double! = Double(plate0Price.text!)!
-        totalPrice.text = String(format: "$%.2f", x * p)
-        taxedTotalPrice.text = String(format: "$%.2f", x * p * 1.095)
-        tippedTotalPrice.text = String(format: "$%.2f", x * p * 1.095 * 1.18)
+        var total = 0.00
+        
+        for i in 0..<len {
+            let count = Double(plateCounters[i].text!)!
+            let price = Double(platePrices[i].text!)!
+            total += count * price
+        }
+        totalPrice.text = String(format: "$%.2f", total)
+        taxedTotalPrice.text = String(format: "$%.2f", total * 1.095)
+        tippedTotalPrice.text = String(format: "$%.2f", total * 1.095 * 1.18)
     }
-    
-
 }
 
