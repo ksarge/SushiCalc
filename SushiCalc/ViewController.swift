@@ -6,19 +6,23 @@
 //  Copyright © 2016 Kyle Sargent. All rights reserved.
 //
 
+/*
+ TODO: Create secondary page that allows the changing of plate colors
+ TODO: Fix String formatting so it actually works on on text fields
+ TODO: Fix keyboard
+ http://stackoverflow.com/questions/31363216/set-the-maximum-character-length-of-a-uitextfield-in-swift
+ */
+
+
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        textField.text = String(format: "$%.2f", textField)
+        textField.text = String(format: "%.2f", textField.text!)
     }
     
-    /*
-     TODO: Create secondary page that allows the changing of plate colors
-     */
-    
+
     @IBOutlet var plateCounters: [UILabel]!
     @IBOutlet var platePrices: [UITextField]!
     
