@@ -18,25 +18,32 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.text = String(format: "%.2f", textField.text!)
-    }
-    
-
-    @IBOutlet var plateCounters: [UILabel]!
     @IBOutlet var platePrices: [UITextField]!
+    @IBOutlet var plateCounters: [UILabel]!
     
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var taxedTotalPrice: UILabel!
     @IBOutlet weak var tippedTotalPrice: UILabel!
     
+    /* Formats text fields to be of format %_.__ */
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.text = String(format: "%.2f", Double(textField.text!)!)
+    }
+    
+    /* Touching the screen anywhere closes the keyboard */
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    /* Add button action */
     @IBAction func addButtonPressed(_ sender: UIButton) {
         let tag   = sender.tag
         let count = Int(plateCounters[tag].text!)!
         plateCounters[tag].text = String(count + 1)
-        calc()
+        calculateTotals()
     }
-
+    
+    /* Subtract button action */
     @IBAction func subButtonPressed(_ sender: UIButton) {
         let tag   = sender.tag
         let count = Int(plateCounters[tag].text!)!
@@ -46,10 +53,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         } else {
             plateCounters[tag].text = String(count - 1)
         }
-        calc()
+        calculateTotals()
     }
     
-    func calc() {
+    /* Calculates subtotal, tax, and tip */
+    func calculateTotals() {
         let len = plateCounters.count
         
         var total = 0.00
