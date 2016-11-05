@@ -10,6 +10,11 @@
  TODO: Create secondary page that allows the changing of plate colors
  TODO: Fix keyboard
  http://stackoverflow.com/questions/31363216/set-the-maximum-character-length-of-a-uitextfield-in-swift
+ TODO: Add done button to num pad
+ http://stackoverflow.com/questions/28338981/how-to-add-done-button-to-numpad-in-ios-8-using-swift
+ TODO: Support scrolling 
+ http://www.appcoda.com/uiscrollview-introduction/
+ http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present
  */
 
 
@@ -24,6 +29,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taxedTotalPrice: UILabel!
     @IBOutlet weak var tippedTotalPrice: UILabel!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    /* Touching the screen anywhere closes the keyboard */
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     /* Formats text fields to be of format %_.__ */
     func textFieldDidEndEditing(_ textField: UITextField) {
         let entry: Double? = Double(textField.text!)
@@ -34,10 +49,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    /* Touching the screen anywhere closes the keyboard */
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
     
     /* Add button action */
     @IBAction func addButtonPressed(_ sender: UIButton) {
