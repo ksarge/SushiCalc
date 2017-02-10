@@ -22,6 +22,8 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet var platePrices: [UITextField]!
     @IBOutlet var plateCounters: [UILabel]!
     
@@ -31,12 +33,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.dismissKeyboard()
     }
+
     
     /* Touching the screen anywhere closes the keyboard */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        scrollView.setContentOffset(CGPoint(x: 0, y: 250), animated: true)
+        
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     /* Formats text fields to be of format %_.__ */
@@ -49,9 +62,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /* Reset button pressed */
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        let len = plateCounters.count
+        for i in 0..<len {
+            plateCounters[i].text = "0"
+            platePrices[i].resignFirstResponder()
+
+        }
+        calculateTotals()
+    }
     
     /* Add button action */
     @IBAction func addButtonPressed(_ sender: UIButton) {
+        for i in 0..<platePrices.count {
+            self.platePrices[i].resignFirstResponder()
+        }
         let tag   = sender.tag
         let count = Int(plateCounters[tag].text!)!
         plateCounters[tag].text = String(count + 1)
@@ -60,14 +86,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     /* Subtract button action */
     @IBAction func subButtonPressed(_ sender: UIButton) {
+        for i in 0..<platePrices.count {
+            self.platePrices[i].resignFirstResponder()
+        }
         let tag   = sender.tag
         let count = Int(plateCounters[tag].text!)!
-        
         if count <= 0 {
             plateCounters[tag].text = String(0)
         } else {
             plateCounters[tag].text = String(count - 1)
         }
+        
         calculateTotals()
     }
     
@@ -85,6 +114,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         totalPrice.text = String(format: "$%.2f", total)
         taxedTotalPrice.text = String(format: "$%.2f", total * 1.095)
         tippedTotalPrice.text = String(format: "$%.2f", total * 1.095 * 1.18)
+    }
+}
+
+extension UIViewController {
+    func keyboard() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
