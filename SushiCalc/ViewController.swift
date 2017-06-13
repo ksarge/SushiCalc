@@ -31,19 +31,25 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taxedTotalPrice: UILabel!
     @IBOutlet weak var tippedTotalPrice: UILabel!
     
+    @IBOutlet weak var tipSlider: UISlider!
+    
+    @IBOutlet weak var tipLabel: UILabel!
+    
+    var calc = Calculator(6)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dismissKeyboard()
     }
-
+    
+    //TODO: RESIGN THOSE FIRST RESPONDERS
     
     /* Touching the screen anywhere closes the keyboard */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
     }
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        scrollView.setContentOffset(CGPoint(x: 0, y: 250), animated: true)
         
     }
     
@@ -54,23 +60,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     /* Formats text fields to be of format %_.__ */
     func textFieldDidEndEditing(_ textField: UITextField) {
-        let entry: Double? = Double(textField.text!)
-        if entry != nil {
-            textField.text = String(format: "%.2f", entry!)
-        } else {
-            textField.text = String(format: "%.2f", Double(textField.tag) + 1)
+        if textField.text == "" {
+            textField.text = "0.00"
         }
+        calc.setPlatePrice(Double(textField.text!)!, textField.tag)
+        platePrices[textField.tag].text = String(calc.getPlatePrice(textField.tag))
+        calc.calculateTotal()
+        refreshTotals()
+
+        
     }
     
     /* Reset button pressed */
     @IBAction func resetButtonPressed(_ sender: Any) {
-        let len = plateCounters.count
-        for i in 0..<len {
-            plateCounters[i].text = "0"
-            platePrices[i].resignFirstResponder()
-
-        }
-        calculateTotals()
+        calc.reset()
+        calc.calculateTotal()
+        refreshTotals()
+        refreshCounters()
+    }
+    
+    @IBAction func sliderUpdated(_ sender: UISlider) {
+        calc.setTip(Int(sender.value))
+        let tip = Int(calc.getTip() * 100)
+        tipLabel.text = String(format: "with %d%% tip:", tip)
+        calc.calculateTotal()
+        refreshTotals()
     }
     
     /* Add button action */
@@ -78,43 +92,49 @@ class ViewController: UIViewController, UITextFieldDelegate {
         for i in 0..<platePrices.count {
             self.platePrices[i].resignFirstResponder()
         }
-        let tag   = sender.tag
-        let count = Int(plateCounters[tag].text!)!
-        plateCounters[tag].text = String(count + 1)
-        calculateTotals()
+        
+        let tag = sender.tag
+        
+        calc.incrementCounter(tag)
+        
+        // Update label
+        plateCounters[tag].text = String(calc.getPlateCounter(tag))
+        
+        calc.calculateTotal()
+        refreshTotals()
     }
+    
     
     /* Subtract button action */
     @IBAction func subButtonPressed(_ sender: UIButton) {
         for i in 0..<platePrices.count {
             self.platePrices[i].resignFirstResponder()
         }
-        let tag   = sender.tag
-        let count = Int(plateCounters[tag].text!)!
-        if count <= 0 {
-            plateCounters[tag].text = String(0)
-        } else {
-            plateCounters[tag].text = String(count - 1)
-        }
+        let tag = sender.tag
         
-        calculateTotals()
+        calc.decrementCounter(tag)
+        
+        // Update label
+        plateCounters[tag].text = String(calc.getPlateCounter(tag))
+        
+        calc.calculateTotal()
+        refreshTotals()
+
     }
     
     /* Calculates subtotal, tax, and tip */
-    func calculateTotals() {
-        let len = plateCounters.count
-        
-        var total = 0.00
-        
-        for i in 0..<len {
-            let count = Double(plateCounters[i].text!)!
-            let price = Double(platePrices[i].text!)!
-            total += count * price
-        }
-        totalPrice.text = String(format: "$%.2f", total)
-        taxedTotalPrice.text = String(format: "$%.2f", total * 1.095)
-        tippedTotalPrice.text = String(format: "$%.2f", total * 1.095 * 1.18)
+    func refreshTotals() {
+        totalPrice.text = String(format: "$%.2f", calc.total)
+        taxedTotalPrice.text = String(format: "$%.2f", calc.total * 1.095)
+        tippedTotalPrice.text = String(format: "$%.2f", calc.total * 1.095 * (1.0 + calc.tip))
     }
+    
+    func refreshCounters() {
+        for i in 0..<plateCounters.count {
+            plateCounters[i].text = String(calc.getPlateCounter(i))
+        }
+    }
+    
 }
 
 extension UIViewController {
